@@ -52,11 +52,12 @@ def fetch_cems(date_str: str, pol_no: str) -> Dict:
         )
         page = context.new_page()
         try:
-            page.goto(CEMS_URL, wait_until="networkidle", timeout=REQUEST_TIMEOUT_MS)
+            page.goto(CEMS_URL, wait_until="domcontentloaded", timeout=REQUEST_TIMEOUT_MS)
+            page.wait_for_timeout(3000)
             page.fill("#ctl00_cthBody_DataDate", date_str)
             page.select_option("#ctl00_cthBody_DDLCno", PLANT_CODE)
             try:
-                page.wait_for_load_state("networkidle", timeout=REQUEST_TIMEOUT_MS)
+                page.wait_for_timeout(3000)
             except PlaywrightTimeoutError:
                 pass
             page.wait_for_selector("#ctl00_cthBody_DDLPolNo", timeout=REQUEST_TIMEOUT_MS)
@@ -72,7 +73,7 @@ def fetch_cems(date_str: str, pol_no: str) -> Dict:
             page.select_option("#ctl00_cthBody_DDLPolNo", pol_no)
             page.click("#ctl00_cthBody_btnSerach")
             try:
-                page.wait_for_load_state("networkidle", timeout=REQUEST_TIMEOUT_MS)
+                page.wait_for_timeout(3000)
             except PlaywrightTimeoutError:
                 pass
             page.wait_for_selector("#ctl00_cthBody_gvList", timeout=REQUEST_TIMEOUT_MS)
