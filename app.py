@@ -194,6 +194,7 @@ def api_online_test():
 def healthz():
     return "ok"
 
+import os
 
 if __name__ == "__main__":
     init_db()
